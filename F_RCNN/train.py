@@ -22,6 +22,7 @@ from detectron2.data import MetadataCatalog, DatasetCatalog
 
 # Personal utilities
 from waste_utils import show_dataset
+from waste_utils import register_waste_dataset
 
 # Create a config and predictor to run a prediction
 # cfg = get_cfg()
@@ -32,15 +33,7 @@ from waste_utils import show_dataset
 # outputs = predictor(image)
 
 #training
-from detectron2.data.datasets import register_coco_instances
-register_coco_instances("trash_train", 
-    {}, 
-    "/home/joren/Documents/Trash_Dataset_Full/train/_annotations.coco.json",
-    "/home/joren/Documents/Trash_Dataset_Full/train/")
-register_coco_instances("trash_valid",
-    {},
-    "/home/joren/Documents/Trash_Dataset_Full/valid/_annotations.coco.json",
-    "/home/joren/Documents/Trash_Dataset_Full/valid/")
+register_waste_dataset()
 
 # test that datasets registered correctly
 # show_dataset("trash_train", 3)
@@ -54,7 +47,7 @@ cfg.DATALOADER.NUM_WORKERS = 2
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
 cfg.SOLVER.IMS_PER_BATCH = 2
 cfg.SOLVER.BASE_LR = 0.00025  # pick a good LR
-cfg.SOLVER.MAX_ITER = 300    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
+cfg.SOLVER.MAX_ITER = 10000    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
 cfg.SOLVER.STEPS = []        # do not decay learning rate
 cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = 16  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
@@ -62,5 +55,5 @@ cfg.MODEL.ROI_HEADS.NUM_CLASSES = 16  # only has one class (ballon). (see https:
 
 os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 trainer = DefaultTrainer(cfg)
-trainer.resume_or_load(resume=False)
+trainer.resume_or_load(resume=True)
 trainer.train()
