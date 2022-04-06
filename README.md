@@ -1,5 +1,3 @@
-# Trash_Detection_New
-
 ## Repos being used
 **detectron2** https://github.com/facebookresearch/detectron2  
 **YOLOv5** https://github.com/ultralytics/yolov5  
@@ -22,9 +20,15 @@ python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ### YOLOv5 
 git clone https://github.com/ultralytics/yolov5  
 cd yolov5  
-pip install -r requirements.txt  
+pip install -r requirements.txt
+pip install wandb
 
 ### DETR
 git clone https://github.com/facebookresearch/detr.git  
 conda install cython scipy  
 pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'  
+
+## Training
+### YOLOv5
+cd YOLOv5  
+python train.py --img 640 --batch 16 --data trash.yaml --weights yolov5m.pt  

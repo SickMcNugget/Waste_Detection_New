@@ -1,0 +1,7 @@
+path: ../datasets/TACO_TrashNet_yolov5
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 16
+names: ['aluminium wrap', 'cardboard', 'cigarette', 'foil', 'general waste', 'glass', 'metal', 'negative', 'paper', 'plastic bag', 'plastic bottle', 'plastic cup', 'plastic straw', 'plastic', 'styrofoam cup', 'styrofoam']
