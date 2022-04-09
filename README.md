@@ -1,3 +1,16 @@
+- [Repos being used](#repos-being-used)
+- [Installation](#installation)
+  - [Begin with detectron2 (for linux)](#begin-with-detectron2-for-linux)
+  - [YOLOv5](#yolov5)
+  - [DETR](#detr)
+- [Training](#training)
+  - [YOLOv5](#yolov5-1)
+- [Contribute](#contribute)
+  - [Classes (case sensitive)](#classes-case-sensitive)
+  - [Submission Format](#submission-format)
+  - [Notes](#notes)
+  - [Example Annotation](#example-annotation)
+
 ## Repos being used
 **detectron2** https://github.com/facebookresearch/detectron2  
 **YOLOv5** https://github.com/ultralytics/yolov5  
@@ -38,4 +51,33 @@ cd YOLOv5
 python train.py --img 640 --batch 16 --data trash.yaml --weights yolov5m.pt  
 ```
 ## Contribute
+### Classes (case sensitive)
+There are 16 classes. 'negative' represents non-trash.
+- aluminium wrap
+- cardboard
+- cigarette
+- foil
+- general waste
+- glass
+- metal
+- negative
+- paper
+- plastic bag
+- plastic bottle
+- plastic cup
+- plastic straw
+- plastic
+- styrofoam cup
+- styrofoam
+
+### Submission Format
+Please submit annotations in the [COCO Format](https://cocodataset.org/#format-data)  
+The annotation type is "1. Object Detection" on the same page.  
+
+### Notes
+If an object is made of thin cardboard (between paper and cardboard), opt for 'paper'.  
+If you can't tell whether an object is a certain material, opt for 'general waste'.  
+When annotating an image, be sure to make the bounding box as small as possible.
+
+### Example Annotation
 ![Alt text](../assets/example.png?raw=true)
