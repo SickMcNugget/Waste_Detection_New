@@ -38,4 +38,4 @@ cd YOLOv5
 python train.py --img 640 --batch 16 --data trash.yaml --weights yolov5m.pt  
 ```
 ## Contribute
-![Alt text](/../<assets>/assets/example.png?raw=true)
+![Alt text](../assets/example.png?raw=true)
