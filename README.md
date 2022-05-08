@@ -54,15 +54,19 @@ pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=Pyth
 ## Training
 ### YOLOv5
 ```shell
-cd YOLOv5  
-python train.py --img 640 --batch 16 --data trash.yaml --weights yolov5m.pt  
+cd YOLOV5  
+python train.py --img 640 --batch 16 --data trash_15.yaml --weights yolov5m.pt --hyp hyp.scratch-low_trash.yaml  
+```
+OR  
+```
+python train.py --img <dimensions> --batch <batch_size recc. 64> --data <yaml for dataset> --weights yolov5m.pt --hyp <customised hyperparameters>
 ```
 
 ---
 
 ## Contribute
 ### Classes (case sensitive)
-There are 16 classes. 'negative' represents non-trash.
+There are 15 classes. 'negative' represents non-trash.
 - aluminium wrap
 - cardboard
 - cigarette
@@ -77,7 +81,6 @@ There are 16 classes. 'negative' represents non-trash.
 - plastic cup
 - plastic straw
 - plastic
-- styrofoam cup
 - styrofoam
 
 ### Submission Format
