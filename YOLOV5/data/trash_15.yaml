@@ -1,0 +1,7 @@
+path: ../datasets/TACO_TN_UAV_15-classes
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 15
+names: ['aluminium wrap', 'cardboard', 'cigarette', 'general waste', 'glass', 'metal', 'negative', 'organic waste', 'paper', 'plastic bag', 'plastic bottle', 'plastic cup', 'plastic straw', 'plastic', 'styrofoam']
