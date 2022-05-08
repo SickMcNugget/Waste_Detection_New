@@ -54,7 +54,7 @@ pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=Pyth
 ## Training
 ### YOLOv5
 ```shell
-cd YOLOv5  
+cd YOLOV5  
 python train.py --img 640 --batch <batch_size> --data <customised .yaml file> --weights yolov5m.pt  
 ```
 
