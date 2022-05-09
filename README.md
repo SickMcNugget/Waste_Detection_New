@@ -60,6 +60,10 @@ python train.py --img 640 --batch 16 --data trash_15.yaml --weights yolov5m.pt -
 OR  
 ```
 python train.py --img <dimensions> --batch <batch_size recc. 64> --data <yaml for dataset> --weights yolov5m.pt --hyp <customised hyperparameters>
+```  
+Finally, test the model  
+```
+python val.py --img 640 --batch 32 --data trash_15.yaml --weights ./runs/train/exp/weights/best.pt --task test --device 0
 ```
 
 ---
