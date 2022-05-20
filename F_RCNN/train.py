@@ -11,6 +11,8 @@ setup_logger()
 # required libraries
 import numpy as np
 import cv2, random, os
+from datetime import datetime
+import os
 
 # utils
 from detectron2 import model_zoo
@@ -41,19 +43,37 @@ register_waste_dataset()
 # Training
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
+
+cfg.OUTPUT_DIR = os.path.join(cfg.OUTPUT_DIR, datetime.now().strftime("%d-%b-%Y_%-I:%M:%S_%p"))
+
 cfg.DATASETS.TRAIN = ("trash_train",)
-cfg.DATASETS.TEST = ()
-cfg.DATALOADER.NUM_WORKERS = 2
+cfg.DATASETS.TEST = ("trash_test",)
+
+cfg.DATALOADER.NUM_WORKERS = 8
+
 cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
-cfg.SOLVER.IMS_PER_BATCH = 2
-cfg.SOLVER.BASE_LR = 0.00025  # pick a good LR
-cfg.SOLVER.MAX_ITER = 10000    # 300 iterations seems good enough for this toy dataset; you will need to train longer for a practical dataset
-cfg.SOLVER.STEPS = []        # do not decay learning rate
-cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128   # faster, and good enough for this toy dataset (default: 512)
-cfg.MODEL.ROI_HEADS.NUM_CLASSES = 16  # only has one class (ballon). (see https://detectron2.readthedocs.io/tutorials/datasets.html#update-the-config-for-new-datasets)
-# NOTE: this config means the number of classes, but a few popular unofficial tutorials incorrect uses num_classes+1 here.
+
+
+cfg.SOLVER.IMS_PER_BATCH = 8
+cfg.SOLVER.MAX_ITER = 25000
+
+#Final lr is calculated by lrf = base_lr * (gamma ^ (step threshold))
+#                       i.e [it 0]     lrf = 5e-3 * (0.1 ^ 0)
+#                           [it 15000] lrf = 5e-3 * (0.1 ^ 1)
+#                           [it 20000] lrf = 5e-3 * (0.1 ^ 2)
+cfg.SOLVER.BASE_LR = 5e-3  # pick a good LR
+cfg.SOLVER.GAMMA=0.1
+cfg.SOLVER.STEPS = (15000,20000,)
+cfg.SOLVER.WARMUP_FACTOR = 0.5 / 2000
+cfg.SOLVER.WARMUP_ITERS = 2000
+cfg.SOLVER.WARMUP_METHOD = "linear"
+cfg.SOLVER.CHECKPOINT_PERIOD = 5000
+cfg.SOLVER.REFERENCE_WORLD_SIZE = 1
+
+cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 192
+cfg.MODEL.ROI_HEADS.NUM_CLASSES = 10
 
 os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 trainer = DefaultTrainer(cfg)
-trainer.resume_or_load(resume=True)
+trainer.resume_or_load(resume=False)
 trainer.train()
