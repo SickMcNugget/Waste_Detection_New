@@ -8,16 +8,16 @@ import cv2
 def register_waste_dataset():
     register_coco_instances("trash_train", 
         {}, 
-        "/home/joren/Documents/full_Trash_Dataset/train/_annotations.coco.json",
-        "/home/joren/Documents/full_Trash_Dataset/train/")
+        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/train/_annotations.coco.json",
+        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/train")
     register_coco_instances("trash_valid",
         {},
-        "/home/joren/Documents/full_Trash_Dataset/valid/_annotations.coco.json",
-        "/home/joren/Documents/full_Trash_Dataset/valid/")
+        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/valid/_annotations.coco.json",
+        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/valid/")
     register_coco_instances("trash_test",
         {},
-        "/home/joren/Documents/full_Trash_Dataset/test/_annotations.coco.json",
-        "/home/joren/Documents/full_Trash_Dataset/test/")
+        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/test/_annotations.coco.json",
+        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/test/")
 
 
 def show_dataset(name, num=3):
