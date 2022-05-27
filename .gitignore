@@ -1,3 +1,4 @@
 *.pth
 datasets/*
 !datasets/coco_fix_det2.py
+last_checkpoint
