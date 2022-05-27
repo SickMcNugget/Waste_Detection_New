@@ -73,7 +73,7 @@ def waste_cfg(yaml="COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"):
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file(yaml))
 
-    cfg.OUTPUT_DIR = os.path.join(cfg.OUTPUT_DIR, datetime.now().strftime("%d-%b-%Y_%-I:%M:%S_%p"))
+    cfg.OUTPUT_DIR = os.path.join(cfg.OUTPUT_DIR, datetime.now().strftime("%d-%b-%Y_%-I-%M-%S-%p"))
 
     cfg.DATASETS.TRAIN = ("trash_train_raw",)
     cfg.DATASETS.TEST = ("trash_test_raw",)
