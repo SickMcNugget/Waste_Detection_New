@@ -28,7 +28,7 @@ conda activate waste
 ```
 **Depending on the version of CUDA that is required the pytorch installation will vary. Change cudatoolkit=11.3 to 10.2 if CUDA 11.3 is not supported on your GPU**
 ```shell
-conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch  
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y  
 pip install opencv-python  
 ```
 ### Begin with detectron2 (for linux)
@@ -45,7 +45,7 @@ pip install wandb
 ### DETR
 ```shell
 git clone https://github.com/facebookresearch/detr.git  
-conda install cython scipy  
+conda install cython scipy -y  
 pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'  
 ```
 
