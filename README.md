@@ -70,20 +70,15 @@ python val.py --img 640 --batch 32 --data trash_15.yaml --weights ./runs/train/e
 
 ## Contribute
 ### Classes (case sensitive)
-There are 15 classes. 'negative' represents non-trash.
+There are 9 or 10 classes. 'negative' is currently under dispute
 - aluminium wrap
 - cardboard
 - cigarette
-- foil
 - general waste
 - glass
 - metal
-- negative
+- negative (maybe)
 - paper
-- plastic bag
-- plastic bottle
-- plastic cup
-- plastic straw
 - plastic
 - styrofoam
 
