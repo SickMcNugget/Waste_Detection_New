@@ -40,18 +40,18 @@ pip install --upgrade pip
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y  
 pip install opencv-python  
 ```
-### Begin with detectron2 (for linux)
+#### Begin with detectron2 (for linux)
 ```shell
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'  
 ```
-### YOLOv5
+#### YOLOv5
 ```shell
 git clone https://github.com/ultralytics/yolov5  
 cd yolov5  
 pip install -r requirements.txt
 pip install wandb
 ```
-### DETR
+#### DETR
 ```shell
 git clone https://github.com/facebookresearch/detr.git  
 conda install cython scipy -y  
