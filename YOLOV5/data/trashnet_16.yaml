@@ -1,4 +1,4 @@
-path: ../datasets/TACO_TrashNet_yolov5
+path: ../datasets/TACO_TrashNet_16-classes
 train: train/images
 val: valid/images
 test: test/images

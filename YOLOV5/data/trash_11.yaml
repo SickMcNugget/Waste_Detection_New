@@ -1,7 +1,0 @@
-path: ../datasets/TACO_TN_UAV_11-classes
-train: train/images
-val: valid/images
-test: test/images
-
-nc: 11
-names: ['aluminium wrap', 'cardboard', 'cigarette', 'general waste', 'glass', 'metal', 'negative', 'organic waste', 'paper', 'plastic', 'styrofoam']

@@ -1,0 +1,7 @@
+path: ../datasets/TACO_TrashNet_9-classes
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 9
+names: ['aluminium wrap', 'cardboard', 'cigarette', 'general waste', 'glass', 'metal', 'paper', 'plastic', 'styrofoam']
