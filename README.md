@@ -21,6 +21,11 @@
 ---
 
 ## Installation
+**For Windows, install Microsoft C++ Build Tools** https://visualstudio.microsoft.com/visual-cpp-build-tools/  
+**Always make sure pip is up to date**
+```shell
+pip install --upgrade pip  
+```
 **Please create a conda environment to make installation easier**
 ```shell
 conda create --name waste python=3.9 -y  
