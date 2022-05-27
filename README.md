@@ -1,31 +1,35 @@
-- [Repos being used](#repos-being-used)
-- [Installation](#installation)
-  - [Begin with detectron2 (for linux)](#begin-with-detectron2-for-linux)
-  - [YOLOv5](#yolov5)
-  - [DETR](#detr)
-- [Training](#training)
-  - [YOLOv5](#yolov5-1)
-- [Contribute](#contribute)
-  - [Classes (case sensitive)](#classes-case-sensitive)
-  - [Submission Format](#submission-format)
-  - [Notes](#notes)
-  - [Example Annotation](#example-annotation)
+- [1. Repos being used](#1-repos-being-used)
+- [2. Installation](#2-installation)
+  - [2.1. Windows Only (Extra Step)](#21-windows-only-extra-step)
+  - [2.2. All platforms](#22-all-platforms)
+    - [2.2.1. detectron2](#221-detectron2)
+    - [2.2.2. YOLOv5](#222-yolov5)
+    - [2.2.3. DETR](#223-detr)
+- [3. Training](#3-training)
+  - [3.1. YOLOv5](#31-yolov5)
+- [4. Contribute](#4-contribute)
+  - [4.1. Classes (case sensitive)](#41-classes-case-sensitive)
+  - [4.2. Submission Format](#42-submission-format)
+  - [4.3. Notes](#43-notes)
+  - [4.4. Example Annotation](#44-example-annotation)
 
 ---
 
-## Repos being used
+## 1. Repos being used
 **detectron2** https://github.com/facebookresearch/detectron2  
 **YOLOv5** https://github.com/ultralytics/yolov5  
 **DETR** https://github.com/facebookresearch/detr  
 
 ---
 
-## Installation
-### Windows Only (Extra Step)
+## 2. Installation
+### 2.1. Windows Only (Extra Step)
 **Install Microsoft C++ Build Tools** https://visualstudio.microsoft.com/visual-cpp-build-tools/  
 **Install Instructions** https://stackoverflow.com/a/64262038  
+**Don't forget to restart your system**  
   
-### All platforms
+### 2.2. All platforms
+**Install Miniconda from** https://docs.conda.io/en/latest/miniconda.html  
 **Please create a conda environment to make installation easier**
 ```shell
 conda create --name waste python=3.9 -y  
@@ -40,28 +44,26 @@ pip install --upgrade pip
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y  
 pip install opencv-python  
 ```
-#### detectron2
+#### 2.2.1. detectron2
 ```shell
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'  
 ```
-#### YOLOv5
+#### 2.2.2. YOLOv5
 ```shell
-git clone https://github.com/ultralytics/yolov5  
 cd yolov5  
-pip install -r requirements.txt
-pip install wandb
+pip install -r requirements.txt  
+pip install wandb  
+cd ..  
 ```
-#### DETR
+#### 2.2.3. DETR
 ```shell
-git clone https://github.com/facebookresearch/detr.git  
 conda install cython scipy -y  
-pip install -U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'  
 ```
 
 ---
 
-## Training
-### YOLOv5
+## 3. Training
+### 3.1. YOLOv5
 ```shell
 cd YOLOV5  
 python train.py --img 640 --batch 16 --data trash_15.yaml --weights yolov5m.pt --hyp hyp.scratch-low_trash.yaml  
@@ -77,8 +79,8 @@ python val.py --img 640 --batch 32 --data trash_15.yaml --weights ./runs/train/e
 
 ---
 
-## Contribute
-### Classes (case sensitive)
+## 4. Contribute
+### 4.1. Classes (case sensitive)
 There are 9 or 10 classes. 'negative' is currently under dispute
 - aluminium wrap
 - cardboard
@@ -91,14 +93,14 @@ There are 9 or 10 classes. 'negative' is currently under dispute
 - plastic
 - styrofoam
 
-### Submission Format
+### 4.2. Submission Format
 Please submit annotations in the [COCO Format](https://cocodataset.org/#format-data)  
 The annotation type is "1. Object Detection" on the same page.  
 
-### Notes
+### 4.3. Notes
 If an object is made of thin cardboard (between paper and cardboard), opt for 'paper'.  
 If you can't tell whether an object is a certain material, opt for 'general waste'.  
 When annotating an image, be sure to make the bounding box as small as possible.
 
-### Example Annotation
+### 4.4. Example Annotation
 ![Alt text](../assets/example.png?raw=true)
