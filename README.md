@@ -21,15 +21,19 @@
 ---
 
 ## Installation
-**For Windows, install Microsoft C++ Build Tools** https://visualstudio.microsoft.com/visual-cpp-build-tools/  
-**Always make sure pip is up to date**
-```shell
-pip install --upgrade pip  
-```
+### Windows Only (Extra Step)
+**Install Microsoft C++ Build Tools** https://visualstudio.microsoft.com/visual-cpp-build-tools/  
+**Install Instructions** https://stackoverflow.com/a/64262038  
+  
+### All platforms
 **Please create a conda environment to make installation easier**
 ```shell
 conda create --name waste python=3.9 -y  
 conda activate waste  
+```
+**Always make sure pip is up to date**
+```shell
+pip install --upgrade pip  
 ```
 **Depending on the version of CUDA that is required the pytorch installation will vary. Change cudatoolkit=11.3 to 10.2 if CUDA 11.3 is not supported on your GPU**
 ```shell
