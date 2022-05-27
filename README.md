@@ -40,7 +40,7 @@ pip install --upgrade pip
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -y  
 pip install opencv-python  
 ```
-#### Begin with detectron2 (for linux)
+#### detectron2
 ```shell
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'  
 ```
