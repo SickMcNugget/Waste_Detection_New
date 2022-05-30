@@ -52,7 +52,7 @@ python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 ```
 #### 2.2.2. YOLOv5
 ```shell
-cd yolov5  
+cd YOLOV5  
 pip install -r requirements.txt  
 pip install wandb  
 cd ..  
