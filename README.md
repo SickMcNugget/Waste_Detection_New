@@ -5,6 +5,7 @@
     - [2.1. Windows Only (Extra Step)](#21-windows-only-extra-step)
     - [2.2. All platforms](#22-all-platforms)
       - [2.2.1. detectron2](#221-detectron2)
+        - [2.2.1.1. Windows extra install](#2211-windows-extra-install)
       - [2.2.2. YOLOv5](#222-yolov5)
       - [2.2.3. DETR](#223-detr)
   - [3. Training](#3-training)
@@ -49,6 +50,10 @@ pip install opencv-python
 #### 2.2.1. detectron2
 ```shell
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'  
+```
+##### 2.2.1.1. Windows extra install
+```shell
+conda install pywin32 -y
 ```
 #### 2.2.2. YOLOv5
 ```shell
