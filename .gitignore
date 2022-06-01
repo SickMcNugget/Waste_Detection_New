@@ -1,5 +1,6 @@
-__pycache__/*
+**/__pycache__/*
 *.pth
 datasets/*
 !datasets/coco_fix_det2.py
 last_checkpoint
+**/wandb/*
