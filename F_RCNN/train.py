@@ -9,23 +9,25 @@ import sys
 def main(args):
     
     # Load some default config parameters
-    cfg = get_cfg_defaults(args)
+    cfg = get_cfg_defaults()
 
     # The registered datasets to use
     cfg.DATASETS.TRAIN = ("trash_train_raw",)
     cfg.DATASETS.TEST = ("trash_test_raw",)
 
     # This is the actual batch size of the model
-    cfg.SOLVER.IMS_PER_BATCH = 8 * args.num_gpus
-    
+    cfg.SOLVER.IMS_PER_BATCH = 4 * args.num_gpus
+    # Learning rate
+    cfg.SOLVER.BASE_LR = 5e-3 * args.num_gpus
+    # Allows stepping down of learning rate at certain steps
+    cfg.SOLVER.GAMMA = 0.5
+    cfg.SOLVER.WARMUP_METHOD = "linear"
+
+    cfg.merge_from_list(args.opts)
+
     # Automatically calculate iterations for 300 epochs
     cfg.SOLVER.MAX_ITER = calc_epoch_conversion(cfg, num_epochs=300)
 
-    # Learning rate
-    cfg.SOLVER.BASE_LR = 5e-3 * args.num_gpus
-
-    # Allows stepping down of learning rate at certain steps
-    cfg.SOLVER.GAMMA = 0.5
     # Step down the learning rate at epochs 150, 200 and 250
     cfg.SOLVER.STEPS = (
         calc_epoch_conversion(cfg, num_epochs=150), 
@@ -35,10 +37,12 @@ def main(args):
     # Warmup rate
     cfg.SOLVER.WARMUP_ITERS = calc_epoch_conversion(cfg, num_epochs=5)
     cfg.SOLVER.WARMUP_FACTOR = 1.0 / cfg.SOLVER.WARMUP_ITERS
-    cfg.SOLVER.WARMUP_METHOD = "linear"
 
     # For model saving (5 times per run)
     cfg.SOLVER.CHECKPOINT_PERIOD = cfg.SOLVER.MAX_ITER // 5
+
+    # Make sure the config is now frozen as-is
+    cfg.freeze()
 
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 

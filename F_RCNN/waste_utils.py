@@ -15,6 +15,8 @@ import os
 import sys
 import argparse
 
+DATA_PATH="../datasets/"
+
 class WasteVisualizer(object):
     def __init__(self, cfg):
         self.metadata = MetadataCatalog.get(
@@ -48,14 +50,14 @@ class WasteVisualizer(object):
         for frame in frame_gen:
             yield process_predictions(frame, self.predictor(frame))
 
-def register_waste_dataset(data_path):
+def register_waste_dataset():
     """Automatically finds and registers COCO datasets"""
-    for directory in os.listdir(data_path):
+    for directory in os.listdir(DATA_PATH):
         if "TACO" in directory and "COCO" in directory:
             suffix = ""
             if "raw" in directory:
                 suffix = "_raw"
-            cur_path = os.path.join(data_path, directory)
+            cur_path = os.path.join(DATA_PATH, directory)
             for subdir in os.listdir(cur_path):
                 if subdir == "train" or subdir == "valid" or subdir == "test":
                     final_path = os.path.abspath(os.path.join(cur_path, subdir))
@@ -64,13 +66,13 @@ def register_waste_dataset(data_path):
                         f"{final_path}/_annotations.coco.json", 
                         final_path)
 
-def get_cfg_defaults(args):
+def get_cfg_defaults():
     """Load the model that will always be used in this project.
     After loading the model, override default parameters that will not change
     """
 
     # Make sure detectron knows where the datasets are
-    register_waste_dataset(args.data_path)
+    register_waste_dataset()
 
     # Get the default config then overrite it with Faster-RCNN's defaults
     cfg = get_cfg()
@@ -157,7 +159,7 @@ Run on multiple machines:
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("data_path", default="", metavar="DATA_ROOT", help="Path to the folder containing COCO datasets")
+    # parser.add_argument("data_path", default="", metavar="DATA_ROOT", help="Path to the folder containing COCO datasets")
     parser.add_argument("--config-file", default="", metavar="FILE", help="path to config file")
     parser.add_argument(
         "--resume",
