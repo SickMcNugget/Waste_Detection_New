@@ -3,8 +3,8 @@ from detectron2.data.datasets import register_coco_instances
 from detectron2.engine.defaults import DefaultPredictor
 from detectron2.utils.visualizer import ColorMode, Visualizer
 from detectron2.utils.video_visualizer import VideoVisualizer
-from detectron2.config import get_cfg
 from detectron2 import model_zoo
+from detectron2.config import get_cfg
 
 import torch
 
@@ -12,6 +12,8 @@ from datetime import datetime
 import random
 import cv2
 import os
+import sys
+import argparse
 
 class WasteVisualizer(object):
     def __init__(self, cfg):
@@ -46,64 +48,54 @@ class WasteVisualizer(object):
         for frame in frame_gen:
             yield process_predictions(frame, self.predictor(frame))
 
-def register_waste_dataset():
-    register_coco_instances("trash_train", 
-        {}, 
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/train/_annotations.coco.json",
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/train")
-    register_coco_instances("trash_valid",
-        {},
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/valid/_annotations.coco.json",
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/valid/")
-    register_coco_instances("trash_test",
-        {},
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/test/_annotations.coco.json",
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO/test/")
+def register_waste_dataset(data_path):
+    """Automatically finds and registers COCO datasets"""
+    for directory in os.listdir(data_path):
+        if "TACO" in directory and "COCO" in directory:
+            suffix = ""
+            if "raw" in directory:
+                suffix = "_raw"
+            cur_path = os.path.join(data_path, directory)
+            for subdir in os.listdir(cur_path):
+                if subdir == "train" or subdir == "valid" or subdir == "test":
+                    final_path = os.path.abspath(os.path.join(cur_path, subdir))
+                    register_coco_instances(f"trash_{subdir}{suffix}", 
+                        {}, 
+                        f"{final_path}/_annotations.coco.json", 
+                        final_path)
 
-    register_coco_instances("trash_train_raw", 
-        {}, 
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO_raw/train/_annotations.coco.json",
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO_raw/train")
-    register_coco_instances("trash_test_raw",
-        {},
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO_raw/test/_annotations.coco.json",
-        "/home/joren/Documents/Waste_Detection_New/datasets/TACO_TN_UAV_10-COCO_raw/test/")
+def get_cfg_defaults(args):
+    """Load the model that will always be used in this project.
+    After loading the model, override default parameters that will not change
+    """
 
-def waste_cfg(yaml="COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"):
+    # Make sure detectron knows where the datasets are
+    register_waste_dataset(args.data_path)
+
+    # Get the default config then overrite it with Faster-RCNN's defaults
     cfg = get_cfg()
-    cfg.merge_from_file(model_zoo.get_config_file(yaml))
+    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
 
-    cfg.OUTPUT_DIR = os.path.join(cfg.OUTPUT_DIR, datetime.now().strftime("%d-%b-%Y_%-I-%M-%S-%p"))
+    # All outputs are written to a time stamped directory
+    cfg.OUTPUT_DIR = os.path.join(cfg.OUTPUT_DIR, datetime.now().strftime("%d-%b-%Y_%I-%M-%S-%p"))
 
-    cfg.DATASETS.TRAIN = ("trash_train_raw",)
-    cfg.DATASETS.TEST = ("trash_test_raw",)
+    # For loading pretrained weights
+    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
 
     cfg.DATALOADER.NUM_WORKERS = 8
 
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(yaml)  # Let training initialize from model zoo
-
-    cfg.SOLVER.IMS_PER_BATCH = 4
-    cfg.SOLVER.MAX_ITER = 35000
-
-    #Final lr is calculated by lrf = base_lr * (gamma ^ (step threshold))
-    #                       i.e [it 0]     lrf = 2e-3 * (0.5 ^ 0)
-    #                           [it 15000] lrf = 2e-3 * (0.5 ^ 1)
-    #                           [it 20000] lrf = 2e-3 * (0.5 ^ 2)
-    cfg.SOLVER.BASE_LR = 4e-3  # pick a good LR
-    cfg.SOLVER.GAMMA=0.3
-    cfg.SOLVER.STEPS = (15000,25000,)
-    cfg.SOLVER.WARMUP_FACTOR = 1.0 / 3000
-    cfg.SOLVER.WARMUP_ITERS = 3000
-    cfg.SOLVER.WARMUP_METHOD = "linear"
-    cfg.SOLVER.CHECKPOINT_PERIOD = 10000
-    cfg.SOLVER.REFERENCE_WORLD_SIZE = 1
-
-    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 128
+    # Model-specific parameters
+    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 10
-    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
 
     return cfg
  
+def calc_epoch_conversion(cfg, num_epochs):
+    # Since detectron2 uses iterations, a conversion will be required
+    dataset_dicts = DatasetCatalog.get(cfg.DATASETS.TRAIN[0])
+    return (len(dataset_dicts) * num_epochs) // cfg.SOLVER.IMS_PER_BATCH
+
 def show_dataset(name, num=3):
     dataset_dicts = DatasetCatalog.get(name)
     for d in random.sample(dataset_dicts, num):
@@ -137,3 +129,67 @@ def predict2(name, predictor, num=3):
         img = out.get_image()[:, :, ::-1]
         cv2.imshow(d["file_name"], img)
         cv2.waitKey(0)
+
+def default_argument_parser(epilog=None):
+    """
+    Create a parser with some common arguments used by detectron2 users.
+
+    Args:
+        epilog (str): epilog passed to ArgumentParser describing the usage.
+
+    Returns:
+        argparse.ArgumentParser:
+    """
+    parser = argparse.ArgumentParser(
+        epilog=epilog
+        or f"""
+Examples:
+
+Run on single machine:
+    $ {sys.argv[0]} --num-gpus 8 --config-file cfg.yaml
+
+Change some config options:
+    $ {sys.argv[0]} --config-file cfg.yaml MODEL.WEIGHTS /path/to/weight.pth SOLVER.BASE_LR 0.001
+
+Run on multiple machines:
+    (machine0)$ {sys.argv[0]} --machine-rank 0 --num-machines 2 --dist-url <URL> [--other-flags]
+    (machine1)$ {sys.argv[0]} --machine-rank 1 --num-machines 2 --dist-url <URL> [--other-flags]
+""",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("data_path", default="", metavar="DATA_ROOT", help="Path to the folder containing COCO datasets")
+    parser.add_argument("--config-file", default="", metavar="FILE", help="path to config file")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Whether to attempt to resume from the checkpoint directory. "
+        "See documentation of `DefaultTrainer.resume_or_load()` for what it means.",
+    )
+    parser.add_argument("--eval-only", action="store_true", help="perform evaluation only")
+    parser.add_argument("--num-gpus", type=int, default=1, help="number of gpus *per machine*")
+    parser.add_argument("--num-machines", type=int, default=1, help="total number of machines")
+    parser.add_argument(
+        "--machine-rank", type=int, default=0, help="the rank of this machine (unique per machine)"
+    )
+
+    # PyTorch still may leave orphan processes in multi-gpu training.
+    # Therefore we use a deterministic way to obtain port,
+    # so that users are aware of orphan processes by seeing the port occupied.
+    port = 2**15 + 2**14 + hash(os.getuid() if sys.platform != "win32" else 1) % 2**14
+    parser.add_argument(
+        "--dist-url",
+        default="tcp://127.0.0.1:{}".format(port),
+        help="initialization URL for pytorch distributed backend. See "
+        "https://pytorch.org/docs/stable/distributed.html for details.",
+    )
+    parser.add_argument(
+        "opts",
+        help="""
+Modify config options at the end of the command. For Yacs configs, use
+space-separated "PATH.KEY VALUE" pairs.
+For python-based LazyConfig, use "path.key=value".
+        """.strip(),
+        default=None,
+        nargs=argparse.REMAINDER,
+    )
+    return parser

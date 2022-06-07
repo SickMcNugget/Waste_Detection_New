@@ -4,8 +4,7 @@ import os
 from tqdm import tqdm
 from detectron2.utils.logger import setup_logger
 
-from waste_utils import WasteVisualizer
-from waste_utils import waste_cfg
+from waste_utils import WasteVisualizer, get_cfg_defaults
 
 def main():
     parser = argparse.ArgumentParser(description="Use a webcam with a trained model")
@@ -14,7 +13,7 @@ def main():
     args = parser.parse_args()
 
     setup_logger()
-    cfg = waste_cfg("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")
+    cfg = get_cfg_defaults()
     cfg.MODEL.WEIGHTS = os.path.join(args.path, "model_final.pth")
 
     vis = WasteVisualizer(cfg)
