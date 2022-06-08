@@ -18,6 +18,10 @@ def main():
     #Make sure the data is visible
     cfg = get_cfg_defaults()
 
+    # Ensure the correct datasets are tested
+    cfg.DATASETS.TRAIN = ("trash_train_9-COCO_raw",)
+    cfg.DATASETS.TEST = ("trash_test_9-COCO_raw",)
+
     predictor = DefaultPredictor(cfg)
     DetectionCheckpointer(predictor.model).load(args.path + "model_final.pth")
 
