@@ -15,7 +15,7 @@ import os
 import sys
 import argparse
 
-DATA_PATH="../datasets/"
+DATA_PATH=os.path.abspath("../datasets/")
 
 class WasteVisualizer(object):
     def __init__(self, cfg):
@@ -51,20 +51,35 @@ class WasteVisualizer(object):
             yield process_predictions(frame, self.predictor(frame))
 
 def register_waste_dataset():
-    """Automatically finds and registers COCO datasets"""
-    for directory in os.listdir(DATA_PATH):
-        if "TACO" in directory and "COCO" in directory:
+    """Automatically finds and registers datasets"""
+    # Get all datasets in the datasets folder
+    datasets = []
+
+    for item in os.listdir(DATA_PATH):
+        # Skip all files
+        if not os.path.isdir(os.path.join(DATA_PATH, item)):
+            continue
+
+        # The main type will be TACO_TN_UAV
+        if "TACO_TN_UAV" in item:
+            # Easier to remember than the full name
+            prefix = "trash_"
+            # Get everything that isnt TACO_TN_UAV into a string
+            suffix = item.replace("TACO_TN_UAV", "")
+        else:
+            # All other datasets will be referred to with their full name
+            prefix = item
             suffix = ""
-            if "raw" in directory:
-                suffix = "_raw"
-            cur_path = os.path.join(DATA_PATH, directory)
-            for subdir in os.listdir(cur_path):
-                if subdir == "train" or subdir == "valid" or subdir == "test":
-                    final_path = os.path.abspath(os.path.join(cur_path, subdir))
-                    register_coco_instances(f"trash_{subdir}{suffix}", 
-                        {}, 
-                        f"{final_path}/_annotations.coco.json", 
-                        final_path)
+
+        cur_path = os.path.join(DATA_PATH, item)
+        for subdir in os.listdir(cur_path):
+            if subdir == "train" or subdir == "valid" or subdir == "test":
+                final_path = os.path.join(cur_path, subdir)
+                register_coco_instances(f"{prefix}{subdir}{suffix}", 
+                    {}, 
+                    f"{final_path}/_annotations.coco.json", 
+                    final_path)
+                datasets.append(f"{prefix}{subdir}{suffix}")
 
 def get_cfg_defaults():
     """Load the model that will always be used in this project.
