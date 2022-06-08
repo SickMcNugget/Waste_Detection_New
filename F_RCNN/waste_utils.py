@@ -5,6 +5,8 @@ from detectron2.utils.visualizer import ColorMode, Visualizer
 from detectron2.utils.video_visualizer import VideoVisualizer
 from detectron2 import model_zoo
 from detectron2.config import get_cfg
+from detectron2.engine import DefaultTrainer
+from detectron2.evaluation import COCOEvaluator
 
 import torch
 
@@ -16,6 +18,11 @@ import sys
 import argparse
 
 DATA_PATH=os.path.abspath("../datasets/")
+
+class WasteTrainer(DefaultTrainer):
+    @classmethod
+    def build_evaluator(cls, cfg, dataset_name):
+        return COCOEvaluator(dataset_name, output_dir=cfg.OUTPUT_DIR)
 
 class WasteVisualizer(object):
     def __init__(self, cfg):
@@ -112,40 +119,6 @@ def calc_epoch_conversion(cfg, num_epochs):
     # Since detectron2 uses iterations, a conversion will be required
     dataset_dicts = DatasetCatalog.get(cfg.DATASETS.TRAIN[0])
     return (len(dataset_dicts) * num_epochs) // cfg.SOLVER.IMS_PER_BATCH
-
-def show_dataset(name, num=3):
-    dataset_dicts = DatasetCatalog.get(name)
-    for d in random.sample(dataset_dicts, num):
-        img = cv2.imread(d["file_name"])
-        visualizer = Visualizer(img[:, :, ::-1], scale=0.5)
-        out = visualizer.draw_dataset_dict(d)
-        cv2.imshow(d["file_name"], out.get_image()[:, :, ::-1])
-        cv2.waitKey(0)
-
-def predict(name, predictor, num=3):
-    dataset_dicts = DatasetCatalog.get(name)
-    for d in random.sample(dataset_dicts, num):
-        img = cv2.imread(d["file_name"])
-        outputs = predictor(img)
-        v = Visualizer(img[:, :, ::-1], scale=0.5)
-        for box in outputs["instances"].pred_boxes.to('cpu'):
-            v.draw_box(box)
-            v.draw_text(str(box[:2].numpy()), tuple(box[:2].numpy()))
-        v = v.get_output()
-        img = v.get_image()[:, :, ::-1]
-        cv2.imshow(d["file_name"], img)
-        cv2.waitKey(0)
-
-def predict2(name, predictor, num=3):
-    dataset_dicts = DatasetCatalog.get(name)
-    for d in random.sample(dataset_dicts, num):
-        img = cv2.imread(d["file_name"])
-        outputs = predictor(img)
-        v = Visualizer(img[:, :, ::-1], scale=0.5)
-        out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-        img = out.get_image()[:, :, ::-1]
-        cv2.imshow(d["file_name"], img)
-        cv2.waitKey(0)
 
 def default_argument_parser(epilog=None):
     """

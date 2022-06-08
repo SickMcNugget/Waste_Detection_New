@@ -1,8 +1,8 @@
 import torch
-from detectron2.engine import DefaultTrainer, launch
+from detectron2.engine import launch
 from detectron2.utils.logger import setup_logger
 import os
-from waste_utils import get_cfg_defaults, default_argument_parser, calc_epoch_conversion
+from waste_utils import WasteTrainer, get_cfg_defaults, default_argument_parser, calc_epoch_conversion
 import argparse
 import sys
 
@@ -42,6 +42,9 @@ def main(args):
     # For model saving (5 times per run)
     cfg.SOLVER.CHECKPOINT_PERIOD = cfg.SOLVER.MAX_ITER // 5
 
+    # Need a testing period (10 times per run)
+    cfg.TEST.EVAL_PERIOD = cfg.SOLVER.MAX_ITER // 10
+
     # Make sure the config is now frozen as-is
     cfg.freeze()
 
@@ -50,7 +53,7 @@ def main(args):
     # Make sure detectron2 is ready to log metrics
     setup_logger()
     # Weights and biases will use the detectron2 logger to upload data
-    trainer = DefaultTrainer(cfg)
+    trainer = WasteTrainer(cfg)
     trainer.resume_or_load(resume=args.resume)
     return trainer.train()
 
