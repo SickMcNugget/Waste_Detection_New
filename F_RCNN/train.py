@@ -12,8 +12,8 @@ def main(args):
     cfg = get_cfg_defaults()
 
     # The registered datasets to use
-    cfg.DATASETS.TRAIN = ("trash_train_raw",)
-    cfg.DATASETS.TEST = ("trash_test_raw",)
+    cfg.DATASETS.TRAIN = ("trash_train_9-COCO_raw",)
+    cfg.DATASETS.TEST = ("trash_test_9-COCO_raw",)
 
     # This is the actual batch size of the model
     cfg.SOLVER.IMS_PER_BATCH = 4 * args.num_gpus
@@ -23,6 +23,7 @@ def main(args):
     cfg.SOLVER.GAMMA = 0.5
     cfg.SOLVER.WARMUP_METHOD = "linear"
 
+    # Allows changes to be made from the command line (only for the above config options)
     cfg.merge_from_list(args.opts)
 
     # Automatically calculate iterations for 300 epochs
