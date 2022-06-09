@@ -2,7 +2,7 @@ import torch
 from detectron2.engine import launch
 from detectron2.utils.logger import setup_logger
 import os
-from waste_utils import WasteTrainer, get_cfg_defaults, default_argument_parser, calc_epoch_conversion
+from waste_utils import WasteTrainer, get_cfg_defaults, default_argument_parser, update_cfg
 import argparse
 import sys
 
@@ -11,39 +11,15 @@ def main(args):
     # Load some default config parameters
     cfg = get_cfg_defaults()
 
+    # Add specific config options for Faster R-CNN
+    update_cfg_fcnn(cfg, args)
+
     # The registered datasets to use
     cfg.DATASETS.TRAIN = ("trash_train_9-COCO_raw",)
     cfg.DATASETS.TEST = ("trash_test_9-COCO_raw",)
 
-    # This is the actual batch size of the model
-    cfg.SOLVER.IMS_PER_BATCH = 4 * args.num_gpus
-    # Learning rate
-    cfg.SOLVER.BASE_LR = 5e-3 * args.num_gpus
-    # Allows stepping down of learning rate at certain steps
-    cfg.SOLVER.GAMMA = 0.5
-    cfg.SOLVER.WARMUP_METHOD = "linear"
-
-    # Allows changes to be made from the command line (only for the above config options)
+    # Allows changes to be made from the command line
     cfg.merge_from_list(args.opts)
-
-    # Automatically calculate iterations for 300 epochs
-    cfg.SOLVER.MAX_ITER = calc_epoch_conversion(cfg, num_epochs=300)
-
-    # Step down the learning rate at epochs 150, 200 and 250
-    cfg.SOLVER.STEPS = (
-        calc_epoch_conversion(cfg, num_epochs=150), 
-        calc_epoch_conversion(cfg, num_epochs=200), 
-        calc_epoch_conversion(cfg, num_epochs=250))
-
-    # Warmup rate
-    cfg.SOLVER.WARMUP_ITERS = calc_epoch_conversion(cfg, num_epochs=5)
-    cfg.SOLVER.WARMUP_FACTOR = 1.0 / cfg.SOLVER.WARMUP_ITERS
-
-    # For model saving (5 times per run)
-    cfg.SOLVER.CHECKPOINT_PERIOD = cfg.SOLVER.MAX_ITER // 5
-
-    # Need a testing period (10 times per run)
-    cfg.TEST.EVAL_PERIOD = cfg.SOLVER.MAX_ITER // 10
 
     # Make sure the config is now frozen as-is
     cfg.freeze()
