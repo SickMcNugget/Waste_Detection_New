@@ -1,6 +1,5 @@
 from detectron2.engine import launch
 from detectron2.utils.logger import setup_logger
-
 import os
 import sys
 
