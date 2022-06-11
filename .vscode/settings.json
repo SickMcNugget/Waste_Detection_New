@@ -1,5 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./F-RCNN_DETR/detr"
-    ]
-}
