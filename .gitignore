@@ -5,4 +5,4 @@ datasets/*
 last_checkpoint
 **/wandb/*
 **/output/*
-.vscode
+.vscode/*
