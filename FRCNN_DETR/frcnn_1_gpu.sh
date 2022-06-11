@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=2 python train.py --type frcnn --num-gpus=1 SOLVER.IMS_PER_BATCH 4 SOLVER.BASE_LR 0.005
