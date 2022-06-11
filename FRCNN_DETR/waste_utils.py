@@ -134,7 +134,6 @@ class BaseSetup(ABC):
     def __init__(self, args):
         self.cfg = get_cfg()
         self.args = args
-        self.trainer = None
 
     def calc_epoch_conversion(self, num_epochs):
         # Since detectron2 uses iterations, a conversion will be required
