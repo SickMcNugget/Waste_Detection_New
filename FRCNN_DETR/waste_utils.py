@@ -232,10 +232,10 @@ class DetrSetup(BaseSetup):
     def update_cfg(self):
         self.cfg.SOLVER.IMS_PER_BATCH = 4 * self.args.num_gpus
         self.cfg.SOLVER.BASE_LR = 1e-5 * self.args.num_gpus
-        self.cfg.SOLVER.MAX_ITER = self.calc_epoch_conversion(num_epochs=300)
-        self.cfg.SOLVER.STEPS = (self.calc_epoch_conversion(num_epochs=200),)
+        self.cfg.SOLVER.MAX_ITER = self.calc_epoch_conversion(num_epochs=500)
+        self.cfg.SOLVER.STEPS = (self.calc_epoch_conversion(num_epochs=300), self.calc_epoch_conversion(num_epochs=400),)
         self.cfg.SOLVER.CHECKPOINT_PERIOD = self.cfg.SOLVER.MAX_ITER // 5
-        self.cfg.TEST.EVAL_PERIOD = self.cfg.SOLVER.MAX_ITER // 100
+        self.cfg.TEST.EVAL_PERIOD = self.calc_epoch_conversion(num_epochs=3) 
 
     def create_trainer(self):
         return WasteTrainerDetr(self.cfg)

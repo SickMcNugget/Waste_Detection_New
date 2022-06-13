@@ -17,8 +17,8 @@ def setup(args):
     """
 
     datasets = [ \
-        "trash_train_10-COCO_raw", \
-        "trash_test_10-COCO_raw"]
+        "trash_train_9-COCO_raw", \
+        "trash_test_9-COCO_raw"]
 
     setup_type = None
     if args.type == "detr":
