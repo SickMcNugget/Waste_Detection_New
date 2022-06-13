@@ -236,6 +236,7 @@ class DetrSetup(BaseSetup):
         self.cfg.SOLVER.STEPS = (self.calc_epoch_conversion(num_epochs=300), self.calc_epoch_conversion(num_epochs=400),)
         self.cfg.SOLVER.CHECKPOINT_PERIOD = self.cfg.SOLVER.MAX_ITER // 5
         self.cfg.TEST.EVAL_PERIOD = self.calc_epoch_conversion(num_epochs=3) 
+        self.cfg.MODEL.DETR.NUM_CLASSES = 9
 
     def create_trainer(self):
         return WasteTrainerDetr(self.cfg)
