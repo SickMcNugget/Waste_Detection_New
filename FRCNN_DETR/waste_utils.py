@@ -189,7 +189,7 @@ class FasterRCNNSetup(BaseSetup):
 
         # Model-specific parameters
         self.cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
-        self.cfg.MODEL.ROI_HEADS.NUM_CLASSES = 10
+        self.cfg.MODEL.ROI_HEADS.NUM_CLASSES = 9
         self.cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
 
     def update_cfg(self):
@@ -201,12 +201,11 @@ class FasterRCNNSetup(BaseSetup):
         self.cfg.SOLVER.GAMMA = 0.5
         self.cfg.SOLVER.WARMUP_METHOD = "linear"
 
-        # Automatically calculate iterations for 300 epochs
-        self.cfg.SOLVER.MAX_ITER = self.calc_epoch_conversion(num_epochs=300)
+        # Automatically calculate iterations for 500 epochs
+        self.cfg.SOLVER.MAX_ITER = self.calc_epoch_conversion(num_epochs=350)
 
-        # Step down the learning rate at epochs 150, 200 and 250
+        # Step down the learning rate at epochs 200 and 250
         self.cfg.SOLVER.STEPS = (
-            self.calc_epoch_conversion(num_epochs=150), 
             self.calc_epoch_conversion(num_epochs=200), 
             self.calc_epoch_conversion(num_epochs=250))
 
