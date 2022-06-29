@@ -88,14 +88,13 @@ python val.py --img 640 --batch 32 --data trash_15.yaml --weights ./runs/train/e
 
 ## 4. Contribute
 ### 4.1. Classes (case sensitive)
-There are 9 or 10 classes. 'negative' is currently under dispute
+There are 9 classes.
 - aluminium wrap
 - cardboard
 - cigarette
 - general waste
 - glass
 - metal
-- negative (maybe)
 - paper
 - plastic
 - styrofoam
