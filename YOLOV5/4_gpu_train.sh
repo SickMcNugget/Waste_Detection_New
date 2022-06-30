@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0,1,3,4 python -m torch.distributed.run --nproc_per_node 4 train.py --img 640 --batch 64 --data trash_9.yaml --weights yolov5l.pt --hyp hyp.scratch-low_trash.yaml --device 0,1,3,4
