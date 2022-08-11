@@ -105,10 +105,10 @@ python train.py --type ('frcnn' or 'detr') --num-gpus=4 SOLVER.IMS_PER_BATCH <to
 
 ## 4. Contribute
 ### 4.0. Current Datasets
-TrashNet (annotated newly with bounding boxes): https://github.com/garythung/trashnet
-TACO (annotated newly once again): http://tacodataset.org/
-UAVVaste (mapped to correct classes): https://uavvaste.github.io/
-
+**TrashNet** (annotated newly with bounding boxes): https://github.com/garythung/trashnet  
+**TACO** (annotated newly once again): http://tacodataset.org/  
+**UAVVaste** (mapped to correct classes): https://uavvaste.github.io/  
+  
 ### 4.1. Classes (case sensitive)
 There are 9 classes.
 - aluminium wrap
