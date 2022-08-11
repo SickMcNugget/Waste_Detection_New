@@ -10,7 +10,7 @@
       - [2.2.3. DETR](#223-detr)
   - [3. Training](#3-training)
     - [3.1. YOLOv5](#31-yolov5)
-    - [3.2. Faster-RCNN and DETR](#32-faster-rcnn-and-detr
+    - [3.2. Faster-RCNN and DETR](#32-faster-rcnn-and-detr)
   - [4. Contribute](#4-contribute)
     - [4.0. Current Datasets](#40-current-datasets)
     - [4.1. Classes (case sensitive)](#41-classes-case-sensitive)
