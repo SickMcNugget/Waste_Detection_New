@@ -10,7 +10,9 @@
       - [2.2.3. DETR](#223-detr)
   - [3. Training](#3-training)
     - [3.1. YOLOv5](#31-yolov5)
+    - [3.2. Faster-RCNN and DETR](#32-faster-rcnn-and-detr
   - [4. Contribute](#4-contribute)
+    - [4.0. Current Datasets](#40-current-datasets)
     - [4.1. Classes (case sensitive)](#41-classes-case-sensitive)
     - [4.2. Submission Format](#42-submission-format)
     - [4.3. Notes](#43-notes)
@@ -73,20 +75,39 @@ conda install cython scipy -y
 ### 3.1. YOLOv5
 ```shell
 cd YOLOV5  
-python train.py --img 640 --batch 16 --data trash_15.yaml --weights yolov5m.pt --hyp hyp.scratch-low_trash.yaml  
+python train.py --img 640 --batch 16 --data trash_9.yaml --weights yolov5m.pt --hyp hyp.scratch-low_trash.yaml  
 ```
 OR  
-```
+```shell
 python train.py --img <dimensions> --batch <batch_size recc. 64> --data <yaml for dataset> --weights yolov5m.pt --hyp <customised hyperparameters>
 ```  
 Finally, test the model  
+```shell
+python val.py --img 640 --batch 32 --data trash_9.yaml --weights ./runs/train/<exp#>/weights/best.pt --task test --device 0
 ```
-python val.py --img 640 --batch 32 --data trash_15.yaml --weights ./runs/train/exp/weights/best.pt --task test --device 0
+### 3.2. Faster-RCNN and DETR
+```shell
+cd FRCNN_DETR
+# Linux
+./frcnn_1_gpu.sh (assuming the current dataset is being used)
+# All
+python train.py --type ('frcnn' or 'detr') --num-gpus=1 SOLVER.IMS_PER_BATCH <batch_size> SOLVER.BASE_LR <learning rate>
 ```
-
+OR FOR MULTI-GPU
+```shell
+# Linux
+./frcnn_4_gpu.sh
+./detr_4_gpu.sh
+# ALL
+python train.py --type ('frcnn' or 'detr') --num-gpus=4 SOLVER.IMS_PER_BATCH <total_batch_size> SOLVER.BASE_LR <learning rate>
 ---
 
 ## 4. Contribute
+### 4.0. Current Datasets
+TrashNet (annotated newly with bounding boxes): https://github.com/garythung/trashnet
+TACO (annotated newly once again): http://tacodataset.org/
+UAVVaste (mapped to correct classes): https://uavvaste.github.io/
+
 ### 4.1. Classes (case sensitive)
 There are 9 classes.
 - aluminium wrap
