@@ -100,6 +100,7 @@ OR FOR MULTI-GPU
 ./detr_4_gpu.sh
 # ALL
 python train.py --type ('frcnn' or 'detr') --num-gpus=4 SOLVER.IMS_PER_BATCH <total_batch_size> SOLVER.BASE_LR <learning rate>
+```
 ---
 
 ## 4. Contribute
