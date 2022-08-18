@@ -18,7 +18,8 @@
     - [4.3. Notes](#43-notes)
     - [4.4. Example Annotation](#44-example-annotation)
   - [5. Milestones](#5-milestones)
-    - [5.1. Best Performance](#51-best-performance)
+    - [5.1. Data Statistics](#51-data-statistics)
+    - [5.2. Metrics and Graphs](#52-metrics-and-graphs)
 
 ---
 
@@ -138,11 +139,17 @@ When annotating an image, be sure to make the bounding box as small as possible.
 ---
 
 ## 5. Milestones
-### 5.1. Best Performance
+### 5.1. Data Statistics
 The current best performance was achieved by using a combination of TACO, TrashNet and UAVVaste.  
 The dataset split used was:  
 - Total images: 6460
 - Train: ~4500 images (70%)
 - Validation: 654 images (10%)
 - Test: ~1300 images (20%)  
+
+### 5.2. Metrics and Graphs
+- mAP: **51.3%**
+- Precision: **62.4%**
+- Recall: **49.1%**  
+
 ![Alt text](../assets/results.png?raw=true)
