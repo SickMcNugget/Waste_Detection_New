@@ -132,3 +132,15 @@ When annotating an image, be sure to make the bounding box as small as possible.
 
 ### 4.4. Example Annotation
 ![Alt text](../assets/example.png?raw=true)
+
+---
+
+## 5. Milestones
+### 5.1. Best Performance
+The current best performance was achieved by using a combination of TACO, TrashNet and UAVVaste.  
+The dataset split used was:  
+- Total images: 6460
+- Train: ~4500 images (70%)
+- Validation: 654 images (10%)
+- Test: ~1300 images (20%)  
+![Alt text(../assets/results.png?raw=true)
