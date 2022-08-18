@@ -17,6 +17,8 @@
     - [4.2. Submission Format](#42-submission-format)
     - [4.3. Notes](#43-notes)
     - [4.4. Example Annotation](#44-example-annotation)
+  - [5. Milestones](#5-milestones)
+    - [5.1. Best Performance](#51-best-performance)
 
 ---
 
@@ -143,4 +145,4 @@ The dataset split used was:
 - Train: ~4500 images (70%)
 - Validation: 654 images (10%)
 - Test: ~1300 images (20%)  
-![Alt text(../assets/results.png?raw=true)
+![Alt text](../assets/results.png?raw=true)
