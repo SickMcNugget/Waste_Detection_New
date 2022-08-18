@@ -19,7 +19,12 @@ def main():
     parser = argparse.ArgumentParser(description='Annotate and save a chosen number of images')
     parser.add_argument('number', metavar='N', type=int,
                         help='The number of images to save')
+    parser.add_argument('--data-path', help="The directory containing COCO images")
+    parser.add_argument('--ann-path', default=args.data_path + "_annotations.coco.json",
+                        help='The annotation file for the data path')
     args = parser.parse_args()
+
+    print(args.ann_path)
 
     #The location of the images and annotations
     data_path = "../datasets/TACO_TN_UAV_9-COCO_raw/train/"
